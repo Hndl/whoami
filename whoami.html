@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<title>Who Am I?</title>
+	
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+	<script type="text/javascript">
+		
+		
+		const COLORSCHEME = ['#0005A5', '#002370', '#FFA100','#EF0B00','#FFD800','#FFFFFF','#000000','#696969'];
+		const BG = 2;
+		const DISPLAY=0;
+		const DISPLAY2=1;
+		const LINE = 4;
+		const BLACK = 6;
+		const WHITE = 5;
+		const DROP_SHADOW = 7;
+
+		const UX_DISPLAY_X_UNITS = (window.innerWidth/8);
+		const UX_DISPLAY_Y_UNITS = (window.innerHeight/8);
+		const UX_DISPLAY_RADIUS = UX_DISPLAY_Y_UNITS/2;
+		const UX_CENTER_X = window.innerWidth/2;
+		const UX_CENTER_Y = window.innerHeight/2;
+		const UX_CARD_W = 4;
+		const UX_CARD_H = 6;
+		const UX_LINE = 10;
+		const UX_LINE_THIN = 4;
+		const UX_SHADOW_X = 10;
+		const UX_SHADOW_Y = 10;
+		const UX_NO_OFFSET = 0;
+
+		const CHARACTERS = [	'Ron Burgundy','Rapunzel','Jack Reacher','Wonder Woman','Homer Simpson',
+						'Hermione Granger','James Bond','Lois Lane','Indiana Jones','Lara Croft','Luke Skywalker',
+						'Dorothy Gale','Samwise Gamgee','Sarah Connor','Deadpool','Daisy Duke','Cookie Monster','Darth Vader','Doctor Evil','Donald Duck','Hulk',
+						'Mini Me','Olaf','Optimus Prime','Pac Man','Pikachu','Pink Panther','R2 D2','Robin Hood',
+						'Scooby Doo','Shrek','Sonic','Snow White','Snoopy','Spock','Star Lord','Superman','Tinker Bell','Woody','Yoda','Data','Jame T Kirk',
+						'Jack Sparrow','Gandalf','Tom','Jerry','Elsa','Captain Hook','Doc','Sleepy','Sneezy','Bashful','Dopey',
+						'Happy','Grumpy','Cinderellla','Merida','Pascal','Fynn Rider']
+		
+		var whoami = "Hndl";
+
+		function preload()	{ }
+
+		function setup()	{ 
+			canvas = createCanvas(window.innerWidth, window.innerHeight); 
+			whoami = random(CHARACTERS);
+		}
+
+		function draw() {
+			
+			background(COLORSCHEME[BG]);
+			renderUX();
+			
+		}
+
+		function mousePressed() {
+ 			//whoami = random(COLORSCHEME);
+ 			//console.log(whoami);
+ 		}
+
+ 		function renderCard( lineCol = COLORSCHEME[LINE],
+ 							 cardCol = COLORSCHEME[DISPLAY], 
+ 							 xoff = UX_NO_OFFSET, 
+ 							 yoff = UX_NO_OFFSET) {
+ 			
+ 			strokeWeight(UX_LINE);
+ 			stroke(lineCol);
+ 			fill(cardCol);
+ 			rect(UX_CENTER_X+xoff,
+ 				UX_CENTER_Y+yoff, 
+ 				UX_DISPLAY_X_UNITS*UX_CARD_W,
+ 				UX_DISPLAY_Y_UNITS*UX_CARD_H,
+ 				UX_DISPLAY_RADIUS,
+ 				UX_DISPLAY_RADIUS,
+ 				UX_DISPLAY_RADIUS,
+ 				UX_DISPLAY_RADIUS);
+ 		}
+
+
+ 		function renderUX () {
+ 			rectMode(CENTER);
+ 			
+ 			renderCard( COLORSCHEME[DROP_SHADOW],
+ 						COLORSCHEME[DROP_SHADOW],
+ 						UX_SHADOW_X,
+ 						UX_SHADOW_Y);
+ 		
+ 			renderCard( );
+ 			
+ 			if (mouseIsPressed)
+ 				whoami = showWord();
+ 			else
+ 				showWord(whoami);
+ 			
+
+
+ 		}
+
+ 		function showWord(word = random(CHARACTERS), typeFaceSize = 32 ){
+
+ 			strokeWeight(UX_LINE_THIN);
+ 			stroke(COLORSCHEME[LINE]);
+ 			fill(COLORSCHEME[DISPLAY2]);
+
+ 			rect(UX_CENTER_X,
+ 				UX_CENTER_Y, 
+ 				UX_DISPLAY_X_UNITS*3.5,
+ 				UX_DISPLAY_Y_UNITS,
+ 				UX_DISPLAY_RADIUS/2,
+ 				UX_DISPLAY_RADIUS/2,
+ 				UX_DISPLAY_RADIUS/2,
+ 				UX_DISPLAY_RADIUS/2);
+
+ 			stroke(COLORSCHEME[WHITE]);
+ 			fill(COLORSCHEME[3]);
+ 			textAlign(CENTER, CENTER);
+ 			textSize(typeFaceSize);
+
+ 			text (word,UX_CENTER_X,UX_CENTER_Y);
+
+ 			return (word);
+
+ 		}
+
+ 		
+		
+	
+	</script>
+<body>
+
+</body>
+</html>
