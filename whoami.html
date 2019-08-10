@@ -8,29 +8,37 @@
 	<script type="text/javascript">
 		
 		
-		const COLORSCHEME = ['#0005A5', '#002370', '#FFA100','#EF0B00','#FFD800','#FFFFFF','#000000','#696969'];
-		const BG = 2;
-		const DISPLAY=0;
-		const DISPLAY2=1;
-		const LINE = 4;
-		const BLACK = 6;
-		const WHITE = 5;
-		const DROP_SHADOW = 7;
+		const COLORSCHEME 	= ['#0005A5', '#002370', '#FFA100','#EF0B00','#FFD800','#FFFFFF','#000000','#696969'];
+		const BG 			= 2;
+		const DISPLAY 		= 0;
+		const DISPLAY2		= 1;
+		const LINE 			= 4;
+		const BLACK 		= 6;
+		const WHITE 		= 5;
+		const DROP_SHADOW 	= 7;
 
 		const UX_DISPLAY_X_UNITS = (window.innerWidth/8);
 		const UX_DISPLAY_Y_UNITS = (window.innerHeight/8);
 		const UX_DISPLAY_RADIUS = UX_DISPLAY_Y_UNITS/2;
-		const UX_CENTER_X = window.innerWidth/2;
-		const UX_CENTER_Y = window.innerHeight/2;
-		const UX_CARD_W = 6;
-		const UX_CARD_H = 2;
-		const UX_LINE = 10;
-		const UX_LINE_THIN = 4;
-		const UX_SHADOW_X = 10;
-		const UX_SHADOW_Y = 10;
-		const UX_NO_OFFSET = 0;
+		const UX_CENTER_X 		= window.innerWidth/2;
+		const UX_CENTER_Y 		= window.innerHeight/2;
+		const UX_CARD_W			= 6;
+		const UX_CARD_H			= 2;
+		const UX_LINE 			= 10;
+		const UX_LINE_THIN 		= 4;
+		const UX_SHADOW_X 		= 10;
+		const UX_SHADOW_Y 		= 10;
+		const UX_NO_OFFSET		= 0;
+		const UX_TIMER_H 		= 100;
+		const UX_TIMER_X_UNITS 	= 3; 
+		const UX_TIMER_Y_UNITS 	= 0.5;
+		
+		const MS_PER_DAY 	= 86400000;
+		const MS_PER_HOUR 	= 3600000;
+		const MS_PER_MIN 	= 60000;
+		const MS_PER_SEC 	= 1000;
 
-		const CHARACTERS = [	'Ron Burgundy','Rapunzel','Jack Reacher','Wonder Woman','Homer Simpson',
+		const CHARACTERS 	= [	'Ron Burgundy','Rapunzel','Jack Reacher','Wonder Woman','Homer Simpson',
 						'Hermione Granger','James Bond','Lois Lane','Indiana Jones','Lara Croft','Luke Skywalker',
 						'Dorothy Gale','Samwise Gamgee','Sarah Connor','Deadpool','Daisy Duke','Cookie Monster','Darth Vader','Doctor Evil','Donald Duck','Hulk',
 						'Mini Me','Olaf','Optimus Prime','Pac Man','Pikachu','Pink Panther','R2 D2','Robin Hood',
@@ -38,39 +46,47 @@
 						'Jack Sparrow','Gandalf','Tom','Jerry','Elsa','Captain Hook','Doc','Sleepy','Sneezy','Bashful','Dopey',
 						'Happy','Grumpy','Cinderellla','Merida','Pascal','Fynn Rider']
 		
+		var GAME_CLOCK = new Date();
+		var timerStartedAt = (new Date).getTime();
+	
 		var whoami = "Hndl";
+	
+
 
 		function preload()	{ }
 
 		function setup()	{ 
 			canvas = createCanvas(window.innerWidth, window.innerHeight); 
 			whoami = random(CHARACTERS);
+
 		}
 
+
 		function draw() {
-			
+			GAME_CLOCK = new Date();
+
 			background(COLORSCHEME[BG]);
 			renderUX();
 			
 		}
 
-		function mousePressed() {
- 			//whoami = random(COLORSCHEME);
- 			//console.log(whoami);
- 		}
+		
 
  		function renderCard( lineCol = COLORSCHEME[LINE],
  							 cardCol = COLORSCHEME[DISPLAY], 
  							 xoff = UX_NO_OFFSET, 
- 							 yoff = UX_NO_OFFSET) {
+ 							 yoff = UX_NO_OFFSET,
+ 							 defaultCardW = UX_CARD_W,
+ 							 defaultCardH = UX_CARD_H,
+ 							 lineThickness = UX_LINE) {
  			
- 			strokeWeight(UX_LINE);
+ 			strokeWeight(lineThickness);
  			stroke(lineCol);
  			fill(cardCol);
  			rect(UX_CENTER_X+xoff,
  				UX_CENTER_Y+yoff, 
- 				UX_DISPLAY_X_UNITS*UX_CARD_W,
- 				UX_DISPLAY_Y_UNITS*UX_CARD_H,
+ 				UX_DISPLAY_X_UNITS*defaultCardW,
+ 				UX_DISPLAY_Y_UNITS*defaultCardH,
  				UX_DISPLAY_RADIUS,
  				UX_DISPLAY_RADIUS,
  				UX_DISPLAY_RADIUS,
@@ -85,18 +101,64 @@
  						COLORSCHEME[DROP_SHADOW],
  						UX_SHADOW_X,
  						UX_SHADOW_Y);
+
+ 			renderCard( COLORSCHEME[DROP_SHADOW],
+ 						COLORSCHEME[DROP_SHADOW],
+ 						UX_SHADOW_X,
+ 						UX_SHADOW_Y+UX_TIMER_H,
+ 						UX_TIMER_X_UNITS,
+ 						UX_TIMER_Y_UNITS)
+ 						
  		
- 			renderCard( );
  			
- 			if (mouseIsPressed)
+ 			renderCard()
+					
+ 			renderCard(	undefined,
+ 						undefined,
+ 						undefined,
+ 						UX_TIMER_H,
+ 						UX_TIMER_X_UNITS,
+ 						UX_TIMER_Y_UNITS,
+ 						UX_LINE_THIN);
+ 			
+ 			if (mouseIsPressed){
  				whoami = showWord();
+ 				timerStartedAt = GAME_CLOCK.getTime();
+
+ 			}
  			else
  				showWord(whoami);
- 			
-
+ 				displayTimer(GAME_CLOCK.getTime() - timerStartedAt);
 
  		}
 
+ 		function displayTimer(millisecondsPlayed, typeFaceSize = 32){
+
+ 			stroke(COLORSCHEME[WHITE]);
+ 			fill(COLORSCHEME[3]);
+ 			textAlign(CENTER, CENTER);
+ 			textSize(typeFaceSize);
+
+ 			text (timeConversion(millisecondsPlayed) + " ",UX_CENTER_X,UX_CENTER_Y+100);
+
+ 		}
+
+ 		function timeConversion(milliseconds) {
+			var hours = milliseconds / MS_PER_HOUR;
+  			var absoluteHours = Math.floor(hours);
+  			var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
+
+		 	var minutes = (hours - absoluteHours) * 60;
+  			var absoluteMinutes = Math.floor(minutes);
+  			var m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
+
+		  	var seconds = (minutes - absoluteMinutes) * 60;
+  			var absoluteSeconds = Math.floor(seconds);
+  			var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+
+  			return h + ' : ' + m + ' : ' + s;
+        }
+ 
  		function showWord(word = random(CHARACTERS), typeFaceSize = 64 ){
 
  			strokeWeight(UX_LINE_THIN);
@@ -114,6 +176,7 @@
 
  			stroke(COLORSCHEME[WHITE]);
  			fill(COLORSCHEME[3]);
+ 		//	textStyle(BOLD);
  			textAlign(CENTER, CENTER);
  			textSize(typeFaceSize);
 
