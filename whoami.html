@@ -22,8 +22,8 @@
 		const UX_DISPLAY_RADIUS = UX_DISPLAY_Y_UNITS/2;
 		const UX_CENTER_X = window.innerWidth/2;
 		const UX_CENTER_Y = window.innerHeight/2;
-		const UX_CARD_W = 4;
-		const UX_CARD_H = 6;
+		const UX_CARD_W = 6;
+		const UX_CARD_H = 2;
 		const UX_LINE = 10;
 		const UX_LINE_THIN = 4;
 		const UX_SHADOW_X = 10;
@@ -97,7 +97,7 @@
 
  		}
 
- 		function showWord(word = random(CHARACTERS), typeFaceSize = 32 ){
+ 		function showWord(word = random(CHARACTERS), typeFaceSize = 64 ){
 
  			strokeWeight(UX_LINE_THIN);
  			stroke(COLORSCHEME[LINE]);
@@ -105,7 +105,7 @@
 
  			rect(UX_CENTER_X,
  				UX_CENTER_Y, 
- 				UX_DISPLAY_X_UNITS*3.5,
+ 				UX_DISPLAY_X_UNITS*5.5,
  				UX_DISPLAY_Y_UNITS,
  				UX_DISPLAY_RADIUS/2,
  				UX_DISPLAY_RADIUS/2,
