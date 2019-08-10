@@ -45,11 +45,27 @@
 						'Scooby Doo','Shrek','Sonic','Snow White','Snoopy','Spock','Star Lord','Superman','Tinker Bell','Woody','Yoda','Data','Jame T Kirk',
 						'Jack Sparrow','Gandalf','Tom','Jerry','Elsa','Captain Hook','Doc','Sleepy','Sneezy','Bashful','Dopey',
 						'Happy','Grumpy','Cinderellla','Merida','Pascal','Fynn Rider']
+
+		const COUNTRIES = ['Afghanistan','Albania','Algeria','Andorra','Angola','Argentina','Australia','Austria','Bahamas','Bahrain','Bangladesh','Barbados','Belgium',
+		'Beliz','Bolivia','Botswana','Brazil','Brunei','Bulgaria','Burundi','Cambodia','Cameroon','Canada','Chad','Chile','China','Colombia','Comoros','Costa Rica','Croatia','Cuba','Cyprus','Czechia','Denmark','Djibouti','Dominica','Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Ethiopia',
+		'Fiji','Finland','France','Gabon','Gambia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guyana','Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati','Kuwait','Laos','Latvia','Lebanon','Lesotho','Liberia',
+		'Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Mauritius','Mexico','Micronesia','Moldova','Monaco',
+		'Mongolia','Montenegro','Morocco','Mozambique','Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea','Norway','Oman',
+		'Pakistan','Palestine State','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Qatar','Romania','Russia','Rwanda','Saint Lucia',
+		'Samoa','San Marino','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa'
+		,'South Korea','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Swaziland','Sweden','Switzerland','Syria','Tajikistan','Tanzania','Thailand','Tonga',
+		'Tunisia','Turkey','Turkmenistan','Uganda','Ukraine','United Kingdom','USA','Uruguay','Uzbekistan','Vanuatu','Venezuela','Yemen','Zambia','Zimbabwe']
 		
+		const LISTS = [CHARACTERS,COUNTRIES];
+		const LISTNAME = ["Fictional Characters", "Countries Of the World"]; 
+		const DEFAULT_LIST = 0;
+
 		var GAME_CLOCK = new Date();
 		var timerStartedAt = (new Date).getTime();
 	
 		var whoami = "Hndl";
+		var categorySlider = null;
+
 	
 
 
@@ -58,7 +74,8 @@
 		function setup()	{ 
 			canvas = createCanvas(window.innerWidth, window.innerHeight); 
 			whoami = random(CHARACTERS);
-
+			categorySlider = createSlider(0, LISTS.length-1, DEFAULT_LIST);
+			categorySlider.position(UX_CENTER_X-70, UX_CENTER_Y-60);
 		}
 
 
@@ -67,7 +84,19 @@
 
 			background(COLORSCHEME[BG]);
 			renderUX();
+
 			
+  			renderSlider();
+
+			
+		}
+
+		function renderSlider() {
+			stroke(COLORSCHEME[WHITE]);
+ 			fill(COLORSCHEME[3]);
+ 			textAlign(CENTER, CENTER);
+ 			textSize(12);
+ 			text (LISTNAME[categorySlider.value()],UX_CENTER_X,UX_CENTER_Y-75);
 		}
 
 		
@@ -159,7 +188,7 @@
   			return h + ' : ' + m + ' : ' + s;
         }
  
- 		function showWord(word = random(CHARACTERS), typeFaceSize = 64 ){
+ 		function showWord(word = random(LISTS[Math.floor(categorySlider.value())]), typeFaceSize = 64 ){
 
  			strokeWeight(UX_LINE_THIN);
  			stroke(COLORSCHEME[LINE]);
@@ -176,7 +205,6 @@
 
  			stroke(COLORSCHEME[WHITE]);
  			fill(COLORSCHEME[3]);
- 		//	textStyle(BOLD);
  			textAlign(CENTER, CENTER);
  			textSize(typeFaceSize);
 
