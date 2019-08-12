@@ -73,43 +73,42 @@
 		const LISTNAME = ["Fictional Characters", "Countries Of the World","Things That Fly","Disney Universe","Marvel Universe"]; 
 		const DEFAULT_LIST = 0;
 
-		var GAME_CLOCK = new Date();
-		var timerStartedAt = (new Date).getTime();
-	
-		var whoami = "Hndl";
-		var categorySlider = null;
-
-	
+		var GAME_CLOCK 		= new Date();
+		var timerStartedAt 	= GAME_CLOCK.getTime();
+		var whoami 			= "Hndl";
+		var categorySlider 	= null;
 
 
 		function preload()	{ }
 
 		function setup()	{ 
+
 			canvas = createCanvas(window.innerWidth, window.innerHeight); 
 			whoami = random(CHARACTERS);
 			categorySlider = createSlider(0, LISTS.length-1, DEFAULT_LIST);
 			categorySlider.position(UX_CENTER_X-70, UX_CENTER_Y-60);
+		
 		}
 
 
 		function draw() {
+
 			GAME_CLOCK = new Date();
 
 			background(COLORSCHEME[BG]);
 			renderUX();
-
-			
   			renderSlider();
 
-			
 		}
 
 		function renderSlider() {
+
 			stroke(COLORSCHEME[WHITE]);
  			fill(COLORSCHEME[3]);
  			textAlign(CENTER, CENTER);
  			textSize(12);
  			text (LISTNAME[categorySlider.value()],UX_CENTER_X,UX_CENTER_Y-75);
+		
 		}
 
 		
@@ -150,8 +149,6 @@
  						UX_SHADOW_Y+UX_TIMER_H,
  						UX_TIMER_X_UNITS,
  						UX_TIMER_Y_UNITS)
- 						
- 		
  			
  			renderCard()
 					
@@ -166,11 +163,11 @@
  			if (mouseIsPressed){
  				whoami = showWord();
  				timerStartedAt = GAME_CLOCK.getTime();
-
- 			}
- 			else
+ 			
+ 			}else
  				showWord(whoami);
- 				displayTimer(GAME_CLOCK.getTime() - timerStartedAt);
+
+ 			displayTimer(GAME_CLOCK.getTime() - timerStartedAt);
 
  		}
 
@@ -186,20 +183,20 @@
  		}
 
  		function timeConversion(milliseconds) {
-			var hours = milliseconds / MS_PER_HOUR;
-  			var absoluteHours = Math.floor(hours);
-  			var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
+			let hours = milliseconds / MS_PER_HOUR;
+  			let absoluteHours = Math.floor(hours);
+  			let h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
 
-		 	var minutes = (hours - absoluteHours) * 60;
-  			var absoluteMinutes = Math.floor(minutes);
-  			var m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
+		 	let minutes = (hours - absoluteHours) * 60;
+  			let absoluteMinutes = Math.floor(minutes);
+  			let m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
 
-		  	var seconds = (minutes - absoluteMinutes) * 60;
-  			var absoluteSeconds = Math.floor(seconds);
-  			var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+		  	let seconds = (minutes - absoluteMinutes) * 60;
+  			let absoluteSeconds = Math.floor(seconds);
+  			let s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
   			return h + ' : ' + m + ' : ' + s;
-        }
+       		}
  
  		function showWord(word = random(LISTS[Math.floor(categorySlider.value())]), typeFaceSize = 64 ){
 
